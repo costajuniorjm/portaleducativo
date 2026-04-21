@@ -591,29 +591,42 @@
             }
 
             if (valorDigitado === dtEstado.respostaCerta) {
+                // RESPOSTA CERTA (COM GIF DE COMEMORAÇÃO)
                 input.style.borderColor = '#2ecc71';
                 input.style.backgroundColor = '#eafaf1';
                 input.disabled = true;
-                fb.innerText = '🤖 BZZZZ... DING! Resposta Exata! 🌟';
                 fb.style.color = '#27ae60';
+                
+                // Injeta o texto e a imagem do GIF de sucesso
+                fb.innerHTML = `
+                    <div style="margin-bottom: 10px;">🤖 BZZZZ... DING! Resposta Exata! 🌟</div>
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmdiN21xamF2MmoyOG1iMWRkYjU5NmpuaGRrMHoxYmh4Y3B4a294ayZlcD12MV9naWZzX3NlYXJjaCZjdD1n/tczJoRU7XwBS8/giphy.gif" alt="Comemoração" style="max-height: 150px; border-radius: 12px; border: 3px solid #2ecc71; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                `;
                 
                 // Registra conquista global
                 let operacaoStr = dtEstado.problemaAtual.m === 2 ? 'Dobro de' : 'Triplo de';
                 registrarConquistaGlobal(`${operacaoStr} ${dtEstado.numeroSorteado} = ${dtEstado.respostaCerta}`);
 
-                setTimeout(iniciarDobroTriplo, 3000);
+                // Espera 4 segundos para a criança curtir a dancinha antes de ir para o próximo
+                setTimeout(iniciarDobroTriplo, 4000);
             } else {
+                // MÁQUINA ENGUIÇADA (COM GIF DE ERRO)
                 input.style.borderColor = '#e74c3c';
                 input.style.backgroundColor = '#fceceb';
-                fb.innerText = 'A máquina enguiçou! O cálculo não está certo. Tente de novo!';
                 fb.style.color = '#e74c3c';
+                
+                fb.innerHTML = `
+                    <div style="margin-bottom: 10px;">A máquina enguiçou! O cálculo não está certo. Tente de novo!</div>
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2MwNG5xMGV2bGFxanJoNXgwaDhvbm13OGRmMWZxdmpyMHdpemt1cyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/N8wR1WZobKXaE/giphy.gif" alt="Máquina enguiçada" style="max-height: 150px; border-radius: 12px; border: 3px solid #e74c3c; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                `;
                 
                 setTimeout(() => {
                     input.style.borderColor = '#bdc3c7';
                     input.style.backgroundColor = '#fff';
                     input.value = '';
+                    fb.innerHTML = ''; // Limpa o GIF e o texto
                     if(window.innerWidth > 600) input.focus();
-                }, 1500);
+                }, 3000);
             }
         }
 
