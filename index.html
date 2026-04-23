@@ -9,7 +9,8 @@
            ESTILOS GERAIS E NAVEGAÇÃO
            ========================================= */
         * { box-sizing: border-box; }
-        body { font-family: 'Comic Sans MS', cursive, sans-serif; background-color: #2c3e50; color: #333; text-align: center; margin: 0; padding: 0; overflow-x: hidden; }
+        /* CORREÇÃO DA FONTE AQUI: Removido o 'cursive' problemático dos celulares */
+        body { font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif; background-color: #2c3e50; color: #333; text-align: center; margin: 0; padding: 0; overflow-x: hidden; }
         
         header { background-color: #34495e; color: white; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); position: relative; transition: 0.3s;}
         header h1 { margin: 0; font-size: 28px; text-shadow: 2px 2px rgba(0,0,0,0.2); color: white; transition: 0.3s;}
@@ -129,6 +130,7 @@
         .arrow { font-size: 40px; color: #7f8c8d; line-height: 1; margin: 5px 0; }
         .drop-estado { width: 140px; height: 60px; border-color: #3498db; background: #ebf5fb; }
         .drop-processo { width: 150px; height: 50px; border-color: #e67e22; background: #fef5e7; margin: 10px 0; border-radius: 20px; font-size: 12px;}
+        .drop-circle { width: 60px; height: 60px; border-radius: 50%; border-color: #8e44ad; background: #f5eef8; flex-shrink: 0;}
 
         /* CAMADAS DA TERRA */
         .terra-area { border-color: #d35400; }
@@ -172,7 +174,7 @@
         .right-btn { background: #e67e22; color: white; }
         .right-btn.selected { background: #d35400; border-color: #f1c40f;}
 
-        /* NOVO SUPER QUIZ MULTIPLA ESCOLHA */
+        /* SUPER QUIZ MULTIPLA ESCOLHA */
         .quiz-question-box { background: #fdf2e9; border: 3px dashed #e67e22; border-radius: 15px; padding: 25px; margin-bottom: 25px; min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.05);}
         .quiz-question-text { font-size: 24px; font-weight: bold; color: #d35400; margin: 0; line-height: 1.4; }
         .quiz-emoji { font-size: 60px; margin-bottom: 10px; animation: bounce 2s infinite; }
@@ -203,7 +205,7 @@
             .tile { width: auto; min-width: 60px; height: auto; min-height: 60px; font-size: 20px; padding: 5px 10px;}
             .rocket-area .tile.money-mode { width: 100px; font-size: 16px; height: 60px; } .rocket-area .dropzone-math.money-mode { width: 110px; height: 70px; }
             .camada-box { flex-direction: column; text-align: center; }
-            .camada-desc, .moon-desc { font-size: 16px; }
+            .camada-desc, .moon-desc, .engine-desc { font-size: 16px; }
             .match-container { gap: 5px;} .match-btn { font-size: 13px; padding: 10px 5px;}
             .quiz-options-grid { grid-template-columns: 1fr; }
         }
@@ -274,7 +276,7 @@
             <div class="card-jogo" style="border-color: #2ecc71;" onclick="abrirTela('tela-ciclo-materia', 'tela-menu-ciencias', 'Laboratório da Matéria', '#27ae60'); iniciarCicloMateria();">
                 <h2 style="color: #27ae60;">Ciclo da Água</h2>
                 <div class="card-icon">🧊💧💨</div>
-                <p>Descubra os estados e processos da matéria!</p>
+                <p>Descubra os estados e os processos da matéria!</p>
                 <button class="card-btn" style="background: #27ae60; box-shadow: 0 4px #1e8449;">Explorar</button>
             </div>
             
@@ -313,15 +315,37 @@
         <div class="game-area-drag ciclo-area">
             <h2>🧪 Laboratório de Transformações</h2>
             <p class="instrucao"><b>1.</b> Toque na ficha colorida embaixo.<br><b>2.</b> Toque no espaço vazio correspondente no laboratório!</p>
+
             <div class="laboratorio">
-                <div class="station"><div class="station-icon">🧊</div><div class="dropzone drop-estado" data-certo="Sólido" data-label="Estado" onclick="soltarPeca(this)">Estado</div></div>
-                <div class="arrow-container"><div class="dropzone drop-processo" data-certo="Fusão" data-label="Processo (Derreter)" onclick="soltarPeca(this)">Processo (Derreter)</div><div class="arrow">➡️</div><div class="arrow">⬅️</div><div class="dropzone drop-processo" data-certo="Solidificação" data-label="Processo (Congelar)" onclick="soltarPeca(this)">Processo (Congelar)</div></div>
-                <div class="station"><div class="station-icon">🫗</div><div class="dropzone drop-estado" data-certo="Líquido" data-label="Estado" onclick="soltarPeca(this)">Estado</div></div>
-                <div class="arrow-container"><div class="dropzone drop-processo" data-certo="Vaporização" data-label="Processo (Ferver)" onclick="soltarPeca(this)">Processo (Ferver)</div><div class="arrow">➡️</div><div class="arrow">⬅️</div><div class="dropzone drop-processo" data-certo="Condensação" data-label="Processo (Embaçar)" onclick="soltarPeca(this)">Processo (Embaçar)</div></div>
-                <div class="station"><div class="station-icon">💨</div><div class="dropzone drop-estado" data-certo="Gasoso" data-label="Estado" onclick="soltarPeca(this)">Estado</div></div>
+                <div class="station">
+                    <div class="station-icon">🧊</div>
+                    <div class="dropzone drop-estado" data-certo="Sólido" data-label="Estado" onclick="soltarPeca(this)">Estado</div>
+                </div>
+                <div class="arrow-container">
+                    <div class="dropzone drop-processo" data-certo="Fusão" data-label="Processo (Derreter)" onclick="soltarPeca(this)">Processo (Derreter)</div>
+                    <div class="arrow">➡️</div>
+                    <div class="arrow">⬅️</div>
+                    <div class="dropzone drop-processo" data-certo="Solidificação" data-label="Processo (Congelar)" onclick="soltarPeca(this)">Processo (Congelar)</div>
+                </div>
+                <div class="station">
+                    <div class="station-icon">🫗</div>
+                    <div class="dropzone drop-estado" data-certo="Líquido" data-label="Estado" onclick="soltarPeca(this)">Estado</div>
+                </div>
+                <div class="arrow-container">
+                    <div class="dropzone drop-processo" data-certo="Vaporização" data-label="Processo (Ferver)" onclick="soltarPeca(this)">Processo (Ferver)</div>
+                    <div class="arrow">➡️</div>
+                    <div class="arrow">⬅️</div>
+                    <div class="dropzone drop-processo" data-certo="Condensação" data-label="Processo (Embaçar)" onclick="soltarPeca(this)">Processo (Embaçar)</div>
+                </div>
+                <div class="station">
+                    <div class="station-icon">💨</div>
+                    <div class="dropzone drop-estado" data-certo="Gasoso" data-label="Estado" onclick="soltarPeca(this)">Estado</div>
+                </div>
             </div>
+
             <p style="color: #7f8c8d; font-weight: bold;">Estoque do Laboratório (Toque e Encaixe):</p>
             <div class="options-container" id="ciclo-options"></div>
+
             <button class="btn-verificar" style="background: #27ae60; box-shadow: 0 6px 0px #1e8449;" onclick="verificarCicloMateria()">Concluir Experiência! 🔬</button>
             <div class="feedback-drag" id="feedback-ciclo"></div>
         </div>
@@ -378,8 +402,7 @@
         <div class="game-area-drag" style="border-color: #9b59b6; max-width: 650px;">
             <h2 style="color: #8e44ad; margin-top: 0; font-size: 32px;">📝 Super Quiz de Ciências</h2>
             
-            <div id="quiz-container">
-                </div>
+            <div id="quiz-container"></div>
 
             <div class="feedback-drag" id="feedback-quiz" style="text-align: center;"></div>
         </div>
@@ -562,7 +585,7 @@
         }
 
         // ==========================================
-        // NOVO JOGO: SUPER QUIZ DE CIÊNCIAS
+        // NOVO: SUPER QUIZ DE MÚLTIPLA ESCOLHA
         // ==========================================
         const bancoSuperQuiz = [
             { q: "Qual é o nome da camada de ar que envolve a Terra?", opts: ["Atmosfera", "Crosta", "Manto", "Espaço"], c: 0, e: "🌍" },
@@ -808,11 +831,11 @@
             if (isNaN(valorDigitado)) { fb.innerText = 'Digite um número!'; fb.style.color = '#e74c3c'; return; }
             if (valorDigitado === dtEstado.respostaCerta) {
                 input.style.borderColor = '#2ecc71'; input.style.backgroundColor = '#eafaf1'; input.disabled = true; fb.style.color = '#27ae60';
-                fb.innerHTML = `<div style="margin-bottom: 10px;">🤖 BZZZZ... DING! Exato! 🌟</div><img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc29zdGM1aGNwbTJhb3E1ZWtpNmQ3MG44OXo1Mmtsdjd0c2s0am80MCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/tczJoRU7XwBS8/giphy.gif" style="max-height: 150px; border-radius: 12px; border: 3px solid #2ecc71;">`;
+                fb.innerHTML = `<div style="margin-bottom: 10px;">🤖 BZZZZ... DING! Exato! 🌟</div><img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGk5bHA5Ymh2ZGZ3ajg4M2FhMWhyMGMyaXc0eHM4a3hqcG15amNkcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/LwzDBXlwVOGz7zi8cp/giphy.gif" style="max-height: 150px; border-radius: 12px; border: 3px solid #2ecc71;">`;
                 registrarConquistaGlobal(`${dtEstado.problemaAtual.m === 2 ? 'Dobro de' : 'Triplo de'} ${dtEstado.numeroSorteado} = ${dtEstado.respostaCerta}`); setTimeout(iniciarDobroTriplo, 4000);
             } else {
                 input.style.borderColor = '#e74c3c'; input.style.backgroundColor = '#fceceb'; fb.style.color = '#e74c3c';
-                fb.innerHTML = `<div style="margin-bottom: 10px;">A máquina enguiçou! Tente de novo!</div><img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDdxNzB3OXc5dG8xd3VqemJrbnMxYjVrdHo4aDN3N2lodDh0ZTRpeSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/N8wR1WZobKXaE/giphy.gif" style="max-height: 150px; border-radius: 12px; border: 3px solid #e74c3c;">`;
+                fb.innerHTML = `<div style="margin-bottom: 10px;">A máquina enguiçou! Tente de novo!</div><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWE4c2JuMWZsdHNodTVndjVhN3ljY2dlMTc2NHA5bHk3MDFmcTF6YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uc3UFoST226hq/giphy.gif" style="max-height: 150px; border-radius: 12px; border: 3px solid #e74c3c;">`;
                 setTimeout(() => { input.style.borderColor = '#bdc3c7'; input.style.backgroundColor = '#fff'; input.value = ''; fb.innerHTML = ''; if(window.innerWidth > 600) input.focus(); }, 3000);
             }
         }
