@@ -835,7 +835,7 @@
                 registrarConquistaGlobal(`${dtEstado.problemaAtual.m === 2 ? 'Dobro de' : 'Triplo de'} ${dtEstado.numeroSorteado} = ${dtEstado.respostaCerta}`); setTimeout(iniciarDobroTriplo, 4000);
             } else {
                 input.style.borderColor = '#e74c3c'; input.style.backgroundColor = '#fceceb'; fb.style.color = '#e74c3c';
-                fb.innerHTML = `<div style="margin-bottom: 10px;">A máquina enguiçou! Tente de novo!</div><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWE4c2JuMWZsdHNodTVndjVhN3ljY2dlMTc2NHA5bHk3MDFmcTF6YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uc3UFoST226hq/giphy.gif" style="max-height: 150px; border-radius: 12px; border: 3px solid #e74c3c;">`;
+                fb.innerHTML = `<div style="margin-bottom: 10px;">A máquina enguiçou! Tente de novo!</div><img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmZiN3diZ214Z2FoeDZib3Flemo2eGh4cGRkZjZreTVvbWgzNDJkdSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/N8wR1WZobKXaE/giphy.gif" style="max-height: 150px; border-radius: 12px; border: 3px solid #e74c3c;">`;
                 setTimeout(() => { input.style.borderColor = '#bdc3c7'; input.style.backgroundColor = '#fff'; input.value = ''; fb.innerHTML = ''; if(window.innerWidth > 600) input.focus(); }, 3000);
             }
         }
