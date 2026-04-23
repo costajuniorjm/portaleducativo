@@ -94,13 +94,17 @@
         .tile.correct { background: #2ecc71; box-shadow: 0 6px 0px #27ae60; border-color: #27ae60; pointer-events: none;}
         .tile.wrong { background: #e74c3c; box-shadow: 0 6px 0px #c0392b; animation: shake 0.4s; }
 
-        /* TEMA FOGUETE (JOGO 3) */
+        /* TEMA FOGUETE (JOGO 3) - MODIFICADO PARA DINHEIRO E CENTENAS */
         .rocket-area { background: #2c3e50; border-color: #f1c40f; color: white;}
         .rocket-area h2 { color: #f1c40f; }
         .rocket-area .instrucao { color: #ecf0f1; }
         .rocket-area .dropzone { background: rgba(255,255,255,0.1); border-color: #7f8c8d; color: white; }
         .rocket-area .dropzone::before { content: '📦'; opacity: 0.2; font-size: 30px; position: absolute; pointer-events: none;}
         .rocket-area .options-container { background: rgba(255,255,255,0.05); border-color: #34495e;}
+        
+        /* Classes dinâmicas para quando for dinheiro */
+        .rocket-area .tile.money-mode { width: 130px; font-size: 22px; }
+        .rocket-area .dropzone.money-mode { width: 140px; }
 
         .btn-verificar { background-color: #9b59b6; color: white; border: none; padding: 15px 30px; font-size: 22px; border-radius: 12px; font-weight: bold; box-shadow: 0 6px 0px #8e44ad; cursor: pointer; transition: 0.1s; }
         .btn-verificar:active { transform: translateY(6px); box-shadow: 0 0px 0px #8e44ad; }
@@ -111,6 +115,10 @@
         @media (max-width: 600px) {
             .board { padding: 15px; } .row { font-size: 35px; } .row-numeros span { width: 40px; } .inputs input { width: 40px; height: 40px; font-size: 24px; } .centena { width: 60px; height: 60px; background-image: repeating-linear-gradient(to right, transparent, transparent 5px, #d35400 5px, #d35400 6px), repeating-linear-gradient(to bottom, transparent, transparent 5px, #d35400 5px, #d35400 6px);} .dezena { width: 6px; height: 60px; background-image: repeating-linear-gradient(to bottom, transparent, transparent 5px, #d35400 5px, #d35400 6px);} .unidade { width: 6px; height: 6px; }
             .dropzone { width: 65px; height: 65px; } .target-num { width: 75px; height: 75px; font-size: 30px;} .tile { width: 60px; height: 60px; font-size: 24px; box-shadow: 0 4px 0px #2980b9;} .tile:active { transform: translateY(2px); box-shadow: 0 2px 0px #2980b9; }
+            /* Responsividade Foguete Dinheiro */
+            .rocket-area .tile.money-mode { width: 100px; font-size: 16px; height: 60px; }
+            .rocket-area .dropzone.money-mode { width: 110px; height: 70px; }
+            .rocket-area .tile { font-size: 26px; }
         }
     </style>
 </head>
@@ -142,7 +150,7 @@
             <div class="card-jogo" onclick="iniciarOrdem()">
                 <h2>Missão Foguete</h2>
                 <div class="card-icon">🚀</div>
-                <p>Organize as cargas na Ordem Crescente ou Decrescente!</p>
+                <p>Organize Centenas e Dinheiro em ordem!</p>
                 <button class="card-btn">Jogar</button>
             </div>
             
@@ -157,12 +165,10 @@
 
     <div id="tela-reagrupamento" class="screen">
         <h2 style="color: #2c3e50; margin-top: 0; margin-bottom: 20px;">🎮 Aventura Matemática 🎮</h2>
-        
         <div class="controls">
             <button onclick="iniciarJogo('adicao')">➕ Nova Conta de Mais</button>
             <button onclick="iniciarJogo('subtracao')">➖ Nova Conta de Menos</button>
         </div>
-
         <div class="game-container">
             <div class="board">
                 <h2 id="operacaoTitulo" style="margin-top:0;">Adição</h2>
@@ -190,18 +196,15 @@
                     </div>
                 </div>
                 <div class="line"></div>
-                
                 <div class="inputs">
                     <input type="number" id="res-c" class="hidden" min="0" max="9" placeholder="C" oninput="verificarInput('C')">
                     <input type="number" id="res-d" min="0" max="9" placeholder="D" oninput="verificarInput('D')">
                     <input type="number" id="res-u" min="0" max="9" placeholder="U" oninput="verificarInput('U')">
                 </div>
-                
                 <button id="btn-acao" class="btn-action hidden"></button>
                 <button class="btn-success hidden" id="btn-final" onclick="finalizarConta()">Verificar Resposta Final!</button>
                 <div id="feedback"></div>
             </div>
-
             <div class="visualizer">
                 <div id="moldura-1" class="moldura">
                     <div class="moldura-titulo" id="titulo-m1">Número 1</div>
@@ -220,7 +223,6 @@
                         <div class="col-unidade" id="m2-uni"></div>
                     </div>
                 </div>
-
                 <div id="moldura-res" class="moldura hidden">
                     <div class="moldura-titulo">Resultado Final Gráfico</div>
                     <div class="columns">
@@ -231,7 +233,6 @@
                 </div>
             </div>
         </div>
-
         <div class="painel-conquistas">
             <h2 style="margin-top:0; color: #d35400; font-size: 20px;">🏆 Suas Conquistas 🏆</h2>
             <div class="trofeus-area" id="area-trofeus"></div>
@@ -243,7 +244,6 @@
         <div class="game-area-drag">
             <h2 style="color: #16a085; margin-top: 0; font-size: 32px;">🏘️ Vizinhos Ocultos</h2>
             <p class="instrucao"><b>1.</b> Toque no número azul.<br><b>2.</b> Toque na casinha vazia onde ele mora!</p>
-            
             <div class="drop-container">
                 <div style="text-align: center;">
                     <div style="font-weight: bold; color: #7f8c8d; margin-bottom: 5px;">Antecessor (-1)</div>
@@ -258,9 +258,7 @@
                     <div class="dropzone" id="viz-drop-suc" onclick="soltarPeca(this, 'suc')"></div>
                 </div>
             </div>
-
             <div class="options-container" id="viz-options"></div>
-
             <button class="btn-verificar" onclick="verificarVizinhos()">Verificar Vizinhos!</button>
             <div class="feedback-drag" id="viz-feedback"></div>
         </div>
@@ -269,13 +267,10 @@
     <div id="tela-ordem" class="screen">
         <div class="game-area-drag rocket-area">
             <h2 style="margin-top: 0; font-size: 32px;">🚀 Missão Foguete</h2>
-            <p class="instrucao" id="ordem-instrucao">Carregue as caixas em <b>Ordem Crescente</b> (do menor para o maior)!</p>
+            <p class="instrucao" id="ordem-instrucao"></p>
             <p style="font-size: 14px; color: #bdc3c7; margin-top: -10px;">Toque na caixa azul e depois no espaço vazio do foguete.</p>
-
             <div class="drop-container" id="ordem-dropzones"></div>
-
             <div class="options-container" id="ordem-options"></div>
-
             <button class="btn-verificar" style="background: #f39c12; box-shadow: 0 6px 0px #d35400;" onclick="verificarOrdem()">Decolar! 🚀</button>
             <div class="feedback-drag" id="ordem-feedback" style="color: #f1c40f;"></div>
         </div>
@@ -284,17 +279,14 @@
     <div id="tela-dobrotriplo" class="screen">
         <div class="game-area-drag" style="max-width: 600px; border-color: #9b59b6;">
             <h2 style="margin-top: 0; font-size: 32px; color: #8e44ad;">🤖 A Máquina Maluca</h2>
-            <p class="instrucao">Leia o probleminha com atenção e descubra o valor que vai sair da máquina do cientista!</p>
-
+            <p class="instrucao">Leia o probleminha com atenção e descubra o valor que vai sair da máquina!</p>
             <div style="background: #fdf2e9; border: 3px dashed #e67e22; border-radius: 15px; padding: 25px; margin-bottom: 25px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05);">
                 <p id="texto-problema" style="font-size: 24px; font-weight: bold; color: #d35400; margin: 0; line-height: 1.4;"></p>
             </div>
-
             <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;">
                 <span style="font-size: 24px; font-weight: bold; color: #2c3e50;">Resposta:</span>
                 <input type="number" id="input-dobrotriplo" style="width: 100px; height: 70px; font-size: 35px; text-align: center; border: 4px solid #bdc3c7; border-radius: 12px; outline: none; transition: 0.3s; color: #2980b9; font-weight: bold;">
             </div>
-
             <button class="btn-verificar" style="background: #8e44ad; box-shadow: 0 6px 0px #71368a; width: 100%;" onclick="verificarDobroTriplo()">Ligar a Máquina! ⚡</button>
             <div class="feedback-drag" id="feedback-dobrotriplo"></div>
         </div>
@@ -305,19 +297,15 @@
         let globais = { historicoContas: [] };
 
         // ==========================================
-        // SISTEMA DE NAVEGAÇÃO DO PORTAL
+        // SISTEMA DE NAVEGAÇÃO
         // ==========================================
         function abrirTela(telaId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(telaId).classList.add('active');
-            
             let btnVoltar = document.getElementById('btnVoltar');
             let titulo = document.getElementById('header-titulo');
-
-            if(telaId === 'tela-menu') {
-                btnVoltar.style.display = 'none';
-                titulo.innerText = 'Portal Matemático';
-            } else {
+            if(telaId === 'tela-menu') { btnVoltar.style.display = 'none'; titulo.innerText = 'Portal Matemático'; } 
+            else { 
                 btnVoltar.style.display = 'block';
                 if(telaId === 'tela-reagrupamento') titulo.innerText = 'Operações';
                 if(telaId === 'tela-vizinhos') titulo.innerText = 'Vizinhos Ocultos';
@@ -326,27 +314,18 @@
             }
         }
 
-        // Função de Troféus Global
         function registrarConquistaGlobal(textoDaConta) {
             globais.historicoContas.push(textoDaConta);
-            
             let areaHistorico = document.getElementById('area-historico');
             if (areaHistorico) {
-                let badge = document.createElement('div');
-                badge.className = 'conta-badge';
-                badge.innerText = textoDaConta;
+                let badge = document.createElement('div'); badge.className = 'conta-badge'; badge.innerText = textoDaConta;
                 areaHistorico.appendChild(badge);
             }
-
             let qtd = globais.historicoContas.length;
             let areaTrofeus = document.getElementById('area-trofeus');
-
             if (areaTrofeus) {
-                if (qtd === 20) {
-                    areaTrofeus.innerHTML += '👑🌟'; setTimeout(() => alert("✨ INACREDITÁVEL! Você ganhou o TROFÉU MÁXIMO DO PORTAL!"), 300);
-                } else if (qtd % 5 === 0) {
-                    areaTrofeus.innerHTML += '🏆'; setTimeout(() => alert("Parabéns! Você ganhou um troféu no Portal!"), 300);
-                }
+                if (qtd === 20) { areaTrofeus.innerHTML += '👑🌟'; setTimeout(() => alert("✨ INACREDITÁVEL! Você ganhou o TROFÉU MÁXIMO DO PORTAL!"), 300); } 
+                else if (qtd % 5 === 0) { areaTrofeus.innerHTML += '🏆'; setTimeout(() => alert("Parabéns! Você ganhou um troféu no Portal!"), 300); }
             }
         }
 
@@ -357,34 +336,24 @@
 
         function selecionarPeca(peca) {
             if(peca.parentElement.classList.contains('dropzone')) return; 
-
             if(pecaSelecionada) pecaSelecionada.classList.remove('selected');
             if(pecaSelecionada === peca) {
-                pecaSelecionada = null;
-                document.querySelectorAll('.dropzone').forEach(dz => dz.classList.remove('highlight'));
-                return;
+                pecaSelecionada = null; document.querySelectorAll('.dropzone').forEach(dz => dz.classList.remove('highlight')); return;
             }
-            pecaSelecionada = peca;
-            peca.classList.add('selected');
-            document.querySelectorAll('.screen.active .dropzone').forEach(dz => {
-                if(dz.children.length === 0) dz.classList.add('highlight');
-            });
+            pecaSelecionada = peca; peca.classList.add('selected');
+            document.querySelectorAll('.screen.active .dropzone').forEach(dz => { if(dz.children.length === 0) dz.classList.add('highlight'); });
         }
 
         function soltarPeca(dropzone) {
             if(!pecaSelecionada) {
                 if(dropzone.children.length > 0) {
-                    let peca = dropzone.children[0];
-                    peca.classList.remove('wrong');
-                    let optionsContainer = dropzone.closest('.game-area-drag').querySelector('.options-container');
-                    optionsContainer.appendChild(peca);
+                    let peca = dropzone.children[0]; peca.classList.remove('wrong');
+                    dropzone.closest('.game-area-drag').querySelector('.options-container').appendChild(peca);
                 }
                 return;
             }
             if(dropzone.children.length === 0) {
-                dropzone.appendChild(pecaSelecionada);
-                pecaSelecionada.classList.remove('selected');
-                pecaSelecionada = null;
+                dropzone.appendChild(pecaSelecionada); pecaSelecionada.classList.remove('selected'); pecaSelecionada = null;
                 document.querySelectorAll('.dropzone').forEach(dz => dz.classList.remove('highlight'));
             }
         }
@@ -393,74 +362,52 @@
         // JOGO 2: VIZINHOS OCULTOS
         // ==========================================
         let vizinhosEstado = { target: 0, ant: 0, suc: 0 };
-
         function iniciarVizinhos() {
-            abrirTela('tela-vizinhos');
-            document.getElementById('viz-feedback').innerText = '';
-            pecaSelecionada = null;
-            
-            document.getElementById('viz-drop-ant').innerHTML = '';
-            document.getElementById('viz-drop-suc').innerHTML = '';
+            abrirTela('tela-vizinhos'); document.getElementById('viz-feedback').innerText = ''; pecaSelecionada = null;
+            document.getElementById('viz-drop-ant').innerHTML = ''; document.getElementById('viz-drop-suc').innerHTML = '';
             document.querySelectorAll('#tela-vizinhos .dropzone').forEach(dz => dz.classList.remove('highlight'));
 
             vizinhosEstado.target = Math.floor(Math.random() * 89) + 10;
-            vizinhosEstado.ant = vizinhosEstado.target - 1;
-            vizinhosEstado.suc = vizinhosEstado.target + 1;
-
+            vizinhosEstado.ant = vizinhosEstado.target - 1; vizinhosEstado.suc = vizinhosEstado.target + 1;
             document.getElementById('viz-target').innerText = vizinhosEstado.target;
 
             let options = [vizinhosEstado.ant, vizinhosEstado.suc];
             while(options.length < 5) {
-                let variacao = Math.floor(Math.random() * 11) - 5;
-                let r = vizinhosEstado.target + variacao;
+                let r = vizinhosEstado.target + (Math.floor(Math.random() * 11) - 5);
                 if(r > 0 && r < 100 && !options.includes(r) && r !== vizinhosEstado.target) options.push(r);
             }
             options.sort(() => Math.random() - 0.5); 
-
-            let container = document.getElementById('viz-options');
-            container.innerHTML = '';
+            let container = document.getElementById('viz-options'); container.innerHTML = '';
             options.forEach(num => {
-                let div = document.createElement('div');
-                div.className = 'tile'; div.innerText = num; div.dataset.val = num;
-                div.onclick = () => selecionarPeca(div);
-                container.appendChild(div);
+                let div = document.createElement('div'); div.className = 'tile'; div.innerText = num; div.dataset.val = num;
+                div.onclick = () => selecionarPeca(div); container.appendChild(div);
             });
         }
 
         function verificarVizinhos() {
-            let dzAnt = document.getElementById('viz-drop-ant');
-            let dzSuc = document.getElementById('viz-drop-suc');
-            let fb = document.getElementById('viz-feedback');
-
-            if(dzAnt.children.length === 0 || dzSuc.children.length === 0) {
-                fb.innerText = 'Preencha as duas casinhas antes de verificar!'; fb.style.color = '#e74c3c'; return;
-            }
-
-            let valAnt = parseInt(dzAnt.children[0].dataset.val);
-            let valSuc = parseInt(dzSuc.children[0].dataset.val);
-            let acertouAnt = valAnt === vizinhosEstado.ant;
-            let acertouSuc = valSuc === vizinhosEstado.suc;
-
-            if(acertouAnt && acertouSuc) {
+            let dzAnt = document.getElementById('viz-drop-ant'), dzSuc = document.getElementById('viz-drop-suc'), fb = document.getElementById('viz-feedback');
+            if(dzAnt.children.length === 0 || dzSuc.children.length === 0) { fb.innerText = 'Preencha as duas casinhas!'; fb.style.color = '#e74c3c'; return; }
+            let valAnt = parseInt(dzAnt.children[0].dataset.val), valSuc = parseInt(dzSuc.children[0].dataset.val);
+            if(valAnt === vizinhosEstado.ant && valSuc === vizinhosEstado.suc) {
                 dzAnt.children[0].classList.add('correct'); dzSuc.children[0].classList.add('correct');
                 fb.innerText = '🌟 PERFEITO! Você encontrou os vizinhos! 🌟'; fb.style.color = '#27ae60';
-                
-                // Registra troféu
-                registrarConquistaGlobal(`${valAnt} < ${vizinhosEstado.target} > ${valSuc}`);
-
-                setTimeout(iniciarVizinhos, 3000); 
+                registrarConquistaGlobal(`${valAnt} < ${vizinhosEstado.target} > ${valSuc}`); setTimeout(iniciarVizinhos, 3000); 
             } else {
-                if(!acertouAnt) { dzAnt.children[0].classList.add('wrong'); setTimeout(()=>dzAnt.children[0].classList.remove('wrong'), 500); }
-                if(!acertouSuc) { dzSuc.children[0].classList.add('wrong'); setTimeout(()=>dzSuc.children[0].classList.remove('wrong'), 500); }
-                fb.innerText = 'Ops! Alguém está na casa errada. Toque na peça para tirá-la e tente de novo!';
-                fb.style.color = '#e74c3c';
+                if(valAnt !== vizinhosEstado.ant) { dzAnt.children[0].classList.add('wrong'); setTimeout(()=>dzAnt.children[0].classList.remove('wrong'), 500); }
+                if(valSuc !== vizinhosEstado.suc) { dzSuc.children[0].classList.add('wrong'); setTimeout(()=>dzSuc.children[0].classList.remove('wrong'), 500); }
+                fb.innerText = 'Ops! Alguém está na casa errada.'; fb.style.color = '#e74c3c';
             }
         }
 
         // ==========================================
-        // JOGO 3: MISSÃO FOGUETE (ORDEM)
+        // JOGO 3: MISSÃO FOGUETE (ATUALIZADO PARA DINHEIRO E CENTENAS)
         // ==========================================
-        let ordemEstado = { tipo: 'crescente', numeros: [], corretos: [] };
+        let ordemEstado = { tipo: 'crescente', numeros: [], corretos: [], isMoney: false };
+
+        function formatarValorOrdem(val, isMoney) {
+            if (isMoney) return 'R$ ' + val.toFixed(2).replace('.', ',');
+            return val;
+        }
 
         function iniciarOrdem() {
             abrirTela('tela-ordem');
@@ -468,14 +415,32 @@
             pecaSelecionada = null;
             
             ordemEstado.tipo = Math.random() > 0.5 ? 'crescente' : 'decrescente';
+            ordemEstado.isMoney = Math.random() > 0.5; // Sorteia o tema da rodada!
+
             let instrucao = ordemEstado.tipo === 'crescente' 
                 ? 'Carregue as caixas em <b>Ordem Crescente</b> (do menor para o maior)!'
                 : 'Carregue as caixas em <b>Ordem Decrescente</b> (do maior para o menor)!';
+
+            if (ordemEstado.isMoney) {
+                instrucao += '<br><span style="color:#f1c40f;">💰 Tema: Quantias em Dinheiro!</span>';
+            } else {
+                instrucao += '<br><span style="color:#f1c40f;">💯 Tema: Números até Centenas!</span>';
+            }
+
             document.getElementById('ordem-instrucao').innerHTML = instrucao;
 
             ordemEstado.numeros = [];
             while(ordemEstado.numeros.length < 5) {
-                let r = Math.floor(Math.random() * 99) + 1;
+                let r;
+                if (ordemEstado.isMoney) {
+                    // Dinheiro de R$ 5,00 a R$ 500,50
+                    let reais = Math.floor(Math.random() * 490) + 5;
+                    let centavos = Math.random() > 0.5 ? 0 : 50;
+                    r = reais + (centavos / 100);
+                } else {
+                    // Números de 10 a 999
+                    r = Math.floor(Math.random() * 989) + 10;
+                }
                 if(!ordemEstado.numeros.includes(r)) ordemEstado.numeros.push(r);
             }
 
@@ -486,7 +451,9 @@
             let dzContainer = document.getElementById('ordem-dropzones');
             dzContainer.innerHTML = '';
             for(let i=0; i<5; i++) {
-                let dz = document.createElement('div'); dz.className = 'dropzone';
+                let dz = document.createElement('div'); 
+                dz.className = 'dropzone';
+                if (ordemEstado.isMoney) dz.classList.add('money-mode');
                 dz.onclick = () => soltarPeca(dz);
                 dzContainer.appendChild(dz);
             }
@@ -494,7 +461,11 @@
             let optContainer = document.getElementById('ordem-options');
             optContainer.innerHTML = '';
             ordemEstado.numeros.forEach(num => {
-                let div = document.createElement('div'); div.className = 'tile'; div.innerText = num; div.dataset.val = num;
+                let div = document.createElement('div'); 
+                div.className = 'tile'; 
+                if (ordemEstado.isMoney) div.classList.add('money-mode');
+                div.innerText = formatarValorOrdem(num, ordemEstado.isMoney); 
+                div.dataset.val = num; // Guarda o valor numérico cru para verificação
                 div.onclick = () => selecionarPeca(div);
                 optContainer.appendChild(div);
             });
@@ -512,7 +483,8 @@
             let erros = 0;
             dzs.forEach((dz, index) => {
                 let peca = dz.children[0];
-                let val = parseInt(peca.dataset.val);
+                // Usa parseFloat por causa dos centavos (0.50)
+                let val = parseFloat(peca.dataset.val);
                 if(val === ordemEstado.corretos[index]) {
                     peca.classList.add('correct');
                 } else {
@@ -523,11 +495,8 @@
 
             if(erros === 0) {
                 fb.innerText = '🚀 Lançamento autorizado! Ordem Perfeita! 🚀'; fb.style.color = '#2ecc71';
-                
-                // Registra troféu
                 let str = ordemEstado.tipo === 'crescente' ? 'Crescente: ' : 'Decresc: ';
-                registrarConquistaGlobal(str + ordemEstado.corretos[0] + '..'+ ordemEstado.corretos[4]);
-
+                registrarConquistaGlobal(str + formatarValorOrdem(ordemEstado.corretos[0], ordemEstado.isMoney) + '..');
                 setTimeout(iniciarOrdem, 3000); 
             } else {
                 fb.innerText = 'Carga desbalanceada! Toque nas caixas vermelhas para tirá-las e arrume a ordem.'; fb.style.color = '#e74c3c';
@@ -538,165 +507,81 @@
         // JOGO 4: MÁQUINA DE DOBRO E TRIPLO
         // ==========================================
         let dtEstado = { respostaCerta: 0, problemaAtual: null, numeroSorteado: 0 };
-
         const bancoDeProblemas = [
             { t: "Lucas tem [N] carrinhos. A máquina fez o dobro. Quantos carrinhos ele tem agora?", m: 2 },
-            { t: "Uma formiga andou [N] centímetros. O besouro andou o triplo dessa distância. Quantos centímetros o besouro andou?", m: 3 },
-            { t: "Na cesta havia [N] maçãs. A árvore mágica deu o dobro dessa quantidade. Quantas maçãs a árvore deu?", m: 2 },
-            { t: "Uma caixa tem [N] lápis de cor. Uma caixa gigante tem o triplo. Quantos lápis tem na caixa gigante?", m: 3 },
-            { t: "Bia guardou R$ [N] no cofrinho. Seu irmão guardou o dobro. Quantos reais o irmão guardou?", m: 2 },
+            { t: "Uma formiga andou [N] centímetros. O besouro andou o triplo. Quantos centímetros o besouro andou?", m: 3 },
+            { t: "Na cesta havia [N] maçãs. A árvore mágica deu o dobro. Quantas maçãs a árvore deu?", m: 2 },
+            { t: "Uma caixa tem [N] lápis. Uma caixa gigante tem o triplo. Quantos lápis tem na caixa gigante?", m: 3 },
+            { t: "Bia guardou R$ [N]. Seu irmão guardou o dobro. Quantos reais o irmão guardou?", m: 2 },
             { t: "O padeiro fez [N] pães de manhã e o triplo à tarde. Quantos pães ele fez à tarde?", m: 3 },
             { t: "Uma árvore tem [N] laranjas. A árvore vizinha tem o dobro. Quantas laranjas tem a árvore vizinha?", m: 2 },
-            { t: "João gastou R$ [N] na feira. Sua mãe gastou o triplo. Quantos reais a mãe gastou?", m: 3 },
-            { t: "A festa precisa de [N] balões azuis e o dobro de balões vermelhos. Quantos balões vermelhos são necessários?", m: 2 },
-            { t: "Um pacote tem [N] figurinhas. O pacote premium tem o triplo. Quantas figurinhas tem no pacote premium?", m: 3 },
-            { t: "O gatinho dormiu [N] minutos de manhã e o dobro à tarde. Quantos minutos ele dormiu à tarde?", m: 2 },
-            { t: "A receita precisa de [N] gramas de açúcar. Para o bolo grande, precisamos do triplo. Quanto de açúcar vamos usar?", m: 3 },
-            { t: "O ingresso infantil custa R$ [N]. O ingresso de adulto custa o dobro. Qual o valor para adultos?", m: 2 },
-            { t: "A aranha andou por [N] metros. A centopeia andou o triplo da distância. Quantos metros a centopeia andou?", m: 3 },
-            { t: "Na sala de aula há [N] cadeiras. No auditório há o dobro. Quantas cadeiras há no auditório?", m: 2 }
+            { t: "João gastou R$ [N]. Sua mãe gastou o triplo. Quantos reais a mãe gastou?", m: 3 },
+            { t: "A festa precisa de [N] balões azuis e o dobro de vermelhos. Quantos vermelhos são necessários?", m: 2 },
+            { t: "Um pacote tem [N] figurinhas. O pacote premium tem o triplo. Quantas figurinhas tem no premium?", m: 3 }
         ];
 
         function iniciarDobroTriplo() {
             abrirTela('tela-dobrotriplo');
-            let input = document.getElementById('input-dobrotriplo');
-            let fb = document.getElementById('feedback-dobrotriplo');
-            
-            input.value = '';
-            input.style.borderColor = '#bdc3c7';
-            input.style.backgroundColor = '#fff';
-            input.disabled = false;
-            fb.innerText = '';
-
+            let input = document.getElementById('input-dobrotriplo'), fb = document.getElementById('feedback-dobrotriplo');
+            input.value = ''; input.style.borderColor = '#bdc3c7'; input.style.backgroundColor = '#fff'; input.disabled = false; fb.innerText = '';
             dtEstado.problemaAtual = bancoDeProblemas[Math.floor(Math.random() * bancoDeProblemas.length)];
-            dtEstado.numeroSorteado = Math.floor(Math.random() * 39) + 12; // 12 a 50
-            
-            let textoFinal = dtEstado.problemaAtual.t.replace('[N]', dtEstado.numeroSorteado);
+            dtEstado.numeroSorteado = Math.floor(Math.random() * 39) + 12; 
+            document.getElementById('texto-problema').innerText = dtEstado.problemaAtual.t.replace('[N]', dtEstado.numeroSorteado);
             dtEstado.respostaCerta = dtEstado.numeroSorteado * dtEstado.problemaAtual.m;
-
-            document.getElementById('texto-problema').innerText = textoFinal;
-            
             if(window.innerWidth > 600) input.focus();
         }
 
         function verificarDobroTriplo() {
-            let input = document.getElementById('input-dobrotriplo');
-            let fb = document.getElementById('feedback-dobrotriplo');
+            let input = document.getElementById('input-dobrotriplo'), fb = document.getElementById('feedback-dobrotriplo');
             let valorDigitado = parseInt(input.value);
-
-            if (isNaN(valorDigitado)) {
-                fb.innerText = 'Digite um número antes de ligar a máquina!';
-                fb.style.color = '#e74c3c';
-                return;
-            }
-
+            if (isNaN(valorDigitado)) { fb.innerText = 'Digite um número antes de ligar a máquina!'; fb.style.color = '#e74c3c'; return; }
+            
             if (valorDigitado === dtEstado.respostaCerta) {
-                // RESPOSTA CERTA (COM GIF DE COMEMORAÇÃO)
-                input.style.borderColor = '#2ecc71';
-                input.style.backgroundColor = '#eafaf1';
-                input.disabled = true;
-                fb.style.color = '#27ae60';
-                
-                // Injeta o texto e a imagem do GIF de sucesso
-                fb.innerHTML = `
-                    <div style="margin-bottom: 10px;">🤖 BZZZZ... DING! Resposta Exata! 🌟</div>
-                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmdiN21xamF2MmoyOG1iMWRkYjU5NmpuaGRrMHoxYmh4Y3B4a294ayZlcD12MV9naWZzX3NlYXJjaCZjdD1n/tczJoRU7XwBS8/giphy.gif" alt="Comemoração" style="max-height: 150px; border-radius: 12px; border: 3px solid #2ecc71; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-                `;
-                
-                // Registra conquista global
-                let operacaoStr = dtEstado.problemaAtual.m === 2 ? 'Dobro de' : 'Triplo de';
-                registrarConquistaGlobal(`${operacaoStr} ${dtEstado.numeroSorteado} = ${dtEstado.respostaCerta}`);
-
-                // Espera 4 segundos para a criança curtir a dancinha antes de ir para o próximo
+                input.style.borderColor = '#2ecc71'; input.style.backgroundColor = '#eafaf1'; input.disabled = true; fb.style.color = '#27ae60';
+                fb.innerHTML = `<div style="margin-bottom: 10px;">🤖 BZZZZ... DING! Resposta Exata! 🌟</div><img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGk5bHA5Ymh2ZGZ3ajg4M2FhMWhyMGMyaXc0eHM4a3hqcG15amNkcyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/LwzDBXlwVOGz7zi8cp/giphy.gif" style="max-height: 150px; border-radius: 12px; border: 3px solid #2ecc71;">`;
+                let opStr = dtEstado.problemaAtual.m === 2 ? 'Dobro de' : 'Triplo de';
+                registrarConquistaGlobal(`${opStr} ${dtEstado.numeroSorteado} = ${dtEstado.respostaCerta}`);
                 setTimeout(iniciarDobroTriplo, 4000);
             } else {
-                // MÁQUINA ENGUIÇADA (COM GIF DE ERRO)
-                input.style.borderColor = '#e74c3c';
-                input.style.backgroundColor = '#fceceb';
-                fb.style.color = '#e74c3c';
-                
-                fb.innerHTML = `
-                    <div style="margin-bottom: 10px;">A máquina enguiçou! O cálculo não está certo. Tente de novo!</div>
-                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2MwNG5xMGV2bGFxanJoNXgwaDhvbm13OGRmMWZxdmpyMHdpemt1cyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/N8wR1WZobKXaE/giphy.gif" alt="Máquina enguiçada" style="max-height: 150px; border-radius: 12px; border: 3px solid #e74c3c; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-                `;
-                
-                setTimeout(() => {
-                    input.style.borderColor = '#bdc3c7';
-                    input.style.backgroundColor = '#fff';
-                    input.value = '';
-                    fb.innerHTML = ''; // Limpa o GIF e o texto
-                    if(window.innerWidth > 600) input.focus();
-                }, 3000);
+                input.style.borderColor = '#e74c3c'; input.style.backgroundColor = '#fceceb'; fb.style.color = '#e74c3c';
+                fb.innerHTML = `<div style="margin-bottom: 10px;">A máquina enguiçou! O cálculo não está certo. Tente de novo!</div><img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWE4c2JuMWZsdHNodTVndjVhN3ljY2dlMTc2NHA5bHk3MDFmcTF6YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uc3UFoST226hq/giphy.gif" style="max-height: 150px; border-radius: 12px; border: 3px solid #e74c3c;">`;
+                setTimeout(() => { input.style.borderColor = '#bdc3c7'; input.style.backgroundColor = '#fff'; input.value = ''; fb.innerHTML = ''; if(window.innerWidth > 600) input.focus(); }, 3000);
             }
         }
 
         // ==========================================
-        // JOGO 1: REAGRUPAMENTO (SEU CÓDIGO)
+        // JOGO 1: REAGRUPAMENTO (CONTAS)
         // ==========================================
-        let estadoOp = {
-            tipo: 'adicao', temCentena: false, fase: 'U',
-            n1_c: 0, n1_d: 0, n1_u: 0, n2_c: 0, n2_d: 0, n2_u: 0,
-            carry_d: 0, carry_c: 0, vis_m1_c: 0, vis_m1_d: 0, vis_m1_u: 0, vis_mr_c: 0, vis_mr_d: 0, vis_mr_u: 0
-        };
-
+        let estadoOp = { tipo: 'adicao', temCentena: false, fase: 'U', n1_c: 0, n1_d: 0, n1_u: 0, n2_c: 0, n2_d: 0, n2_u: 0, carry_d: 0, carry_c: 0, vis_m1_c: 0, vis_m1_d: 0, vis_m1_u: 0, vis_mr_c: 0, vis_mr_d: 0, vis_mr_u: 0 };
         function getElOp(id) { return document.getElementById(id); }
         function notificarAcaoOp(msg, cor) { let fb = getElOp('feedback'); if(fb) { fb.innerText = msg; fb.style.color = cor; } }
 
         function iniciarJogo(tipo) {
-            estadoOp.tipo = tipo; estadoOp.fase = 'U'; estadoOp.carry_d = 0; estadoOp.carry_c = 0;
-            estadoOp.temCentena = Math.random() > 0.5; 
-            
-            limparTelaOp();
-            configurarVisibilidadeCentenasOp(estadoOp.temCentena);
-
+            estadoOp.tipo = tipo; estadoOp.fase = 'U'; estadoOp.carry_d = 0; estadoOp.carry_c = 0; estadoOp.temCentena = Math.random() > 0.5; 
+            limparTelaOp(); configurarVisibilidadeCentenasOp(estadoOp.temCentena);
             if (tipo === 'adicao') {
-                getElOp('operacaoTitulo').innerText = 'Adição (Vai 1)';
-                getElOp('sinalVisual').innerText = '+'; getElOp('sinal-meio').innerText = '+';
-                
-                estadoOp.n1_u = Math.floor(Math.random() * 7) + 3; 
-                let min_u2 = 10 - estadoOp.n1_u; 
-                estadoOp.n2_u = Math.floor(Math.random() * (9 - min_u2 + 1)) + min_u2; 
-
+                getElOp('operacaoTitulo').innerText = 'Adição (Vai 1)'; getElOp('sinalVisual').innerText = '+'; getElOp('sinal-meio').innerText = '+';
+                estadoOp.n1_u = Math.floor(Math.random() * 7) + 3; let min_u2 = 10 - estadoOp.n1_u; estadoOp.n2_u = Math.floor(Math.random() * (9 - min_u2 + 1)) + min_u2; 
                 if(estadoOp.temCentena) {
                     estadoOp.n1_c = Math.floor(Math.random() * 4) + 1; estadoOp.n2_c = Math.floor(Math.random() * 4) + 1;
-                    if (Math.random() > 0.4) {
-                        estadoOp.n1_d = Math.floor(Math.random() * 6) + 4; 
-                        let min_d2 = 9 - estadoOp.n1_d; if (min_d2 < 1) min_d2 = 1;
-                        estadoOp.n2_d = Math.floor(Math.random() * (9 - min_d2 + 1)) + min_d2;
-                    } else {
-                        estadoOp.n1_d = Math.floor(Math.random() * 4) + 1; estadoOp.n2_d = Math.floor(Math.random() * 4) + 1; 
-                    }
-                } else {
-                    estadoOp.n1_c = 0; estadoOp.n2_c = 0;
-                    estadoOp.n1_d = Math.floor(Math.random() * 5) + 1; 
-                    estadoOp.n2_d = Math.floor(Math.random() * (8 - estadoOp.n1_d)) + 1; 
-                }
-
+                    if (Math.random() > 0.4) { estadoOp.n1_d = Math.floor(Math.random() * 6) + 4; let min_d2 = 9 - estadoOp.n1_d; if (min_d2 < 1) min_d2 = 1; estadoOp.n2_d = Math.floor(Math.random() * (9 - min_d2 + 1)) + min_d2;
+                    } else { estadoOp.n1_d = Math.floor(Math.random() * 4) + 1; estadoOp.n2_d = Math.floor(Math.random() * 4) + 1; }
+                } else { estadoOp.n1_c = 0; estadoOp.n2_c = 0; estadoOp.n1_d = Math.floor(Math.random() * 5) + 1; estadoOp.n2_d = Math.floor(Math.random() * (8 - estadoOp.n1_d)) + 1; }
                 estadoOp.vis_mr_c = 0; estadoOp.vis_mr_d = 0; estadoOp.vis_mr_u = 0;
                 liberarInputOp('u'); notificarAcaoOp('Comece somando a coluna das UNIDADES e digite o valor!', '#333');
-
-            } else { // SUBTRACAO
-                getElOp('operacaoTitulo').innerText = 'Subtração (Empresta 1)';
-                getElOp('sinalVisual').innerText = '-'; getElOp('sinal-meio').innerText = '-';
-
-                estadoOp.n1_u = Math.floor(Math.random() * 6); 
-                estadoOp.n2_u = Math.floor(Math.random() * (9 - (estadoOp.n1_u + 1) + 1)) + (estadoOp.n1_u + 1); 
-
+            } else {
+                getElOp('operacaoTitulo').innerText = 'Subtração (Empresta 1)'; getElOp('sinalVisual').innerText = '-'; getElOp('sinal-meio').innerText = '-';
+                estadoOp.n1_u = Math.floor(Math.random() * 6); estadoOp.n2_u = Math.floor(Math.random() * (9 - (estadoOp.n1_u + 1) + 1)) + (estadoOp.n1_u + 1); 
                 if(estadoOp.temCentena) {
                     estadoOp.n1_c = Math.floor(Math.random() * 5) + 4; estadoOp.n2_c = Math.floor(Math.random() * (estadoOp.n1_c - 1)) + 1; 
                     estadoOp.n1_d = Math.floor(Math.random() * 6); estadoOp.n2_d = Math.floor(Math.random() * (9 - (estadoOp.n1_d + 1) + 1)) + (estadoOp.n1_d + 1); 
                 } else {
-                    estadoOp.n1_c = 0; estadoOp.n2_c = 0;
-                    estadoOp.n1_d = Math.floor(Math.random() * 5) + 4; estadoOp.n2_d = Math.floor(Math.random() * (estadoOp.n1_d - 1)) + 1; 
+                    estadoOp.n1_c = 0; estadoOp.n2_c = 0; estadoOp.n1_d = Math.floor(Math.random() * 5) + 4; estadoOp.n2_d = Math.floor(Math.random() * (estadoOp.n1_d - 1)) + 1; 
                 }
-
-                estadoOp.vis_m1_c = estadoOp.n1_c; estadoOp.vis_m1_d = estadoOp.n1_d; estadoOp.vis_m1_u = estadoOp.n1_u;
-                avaliarFaseSubtracaoOp(); 
+                estadoOp.vis_m1_c = estadoOp.n1_c; estadoOp.vis_m1_d = estadoOp.n1_d; estadoOp.vis_m1_u = estadoOp.n1_u; avaliarFaseSubtracaoOp(); 
             }
-
             getElOp('num1-c').innerText = estadoOp.n1_c; getElOp('num1-d').innerText = estadoOp.n1_d; getElOp('num1-u').innerText = estadoOp.n1_u;
             getElOp('num2-c').innerText = estadoOp.n2_c; getElOp('num2-d').innerText = estadoOp.n2_d; getElOp('num2-u').innerText = estadoOp.n2_u;
-
             getElOp('moldura-1').classList.remove('hidden'); getElOp('moldura-2').classList.remove('hidden'); getElOp('sinal-meio').classList.remove('hidden');
             renderBlocosOp('m1-cen', estadoOp.n1_c, 'centena'); renderBlocosOp('m1-dez', estadoOp.n1_d, 'dezena'); renderBlocosOp('m1-uni', estadoOp.n1_u, 'unidade');
             renderBlocosOp('m2-cen', estadoOp.n2_c, 'centena'); renderBlocosOp('m2-dez', estadoOp.n2_d, 'dezena'); renderBlocosOp('m2-uni', estadoOp.n2_u, 'unidade');
@@ -705,28 +590,19 @@
         function limparTelaOp() {
             ['u', 'd', 'c'].forEach(col => { let el = getElOp('res-' + col); if(el) { el.value = ''; el.disabled = true; el.classList.remove('correct', 'wrong'); } });
             getElOp('feedback').innerText = ''; getElOp('btn-acao').classList.add('hidden'); getElOp('btn-final').classList.add('hidden');
-            getElOp('carry-c').innerText = ''; getElOp('carry-d').innerText = ''; getElOp('carry-u').innerText = '';
-            getElOp('carry-c').classList.add('hidden'); 
-            getElOp('num1-c').classList.remove('riscado'); getElOp('num1-d').classList.remove('riscado'); getElOp('num1-u').classList.remove('riscado');
-            getElOp('moldura-res').classList.add('hidden');
+            getElOp('carry-c').innerText = ''; getElOp('carry-d').innerText = ''; getElOp('carry-u').innerText = ''; getElOp('carry-c').classList.add('hidden'); 
+            getElOp('num1-c').classList.remove('riscado'); getElOp('num1-d').classList.remove('riscado'); getElOp('num1-u').classList.remove('riscado'); getElOp('moldura-res').classList.add('hidden');
         }
 
-        function configurarVisibilidadeCentenasOp(mostrar) {
-            const IDs = ['num1-c', 'num2-c', 'res-c', 'm1-cen', 'm2-cen', 'mr-cen'];
-            IDs.forEach(id => { let el = getElOp(id); if (el) { if (mostrar) el.classList.remove('hidden'); else el.classList.add('hidden'); } });
-        }
-
+        function configurarVisibilidadeCentenasOp(mostrar) { const IDs = ['num1-c', 'num2-c', 'res-c', 'm1-cen', 'm2-cen', 'mr-cen']; IDs.forEach(id => { let el = getElOp(id); if (el) { if (mostrar) el.classList.remove('hidden'); else el.classList.add('hidden'); } }); }
         function renderBlocosOp(id, qtd, classe) { let box = getElOp(id); if(box) { let h = ''; for(let i=0; i<qtd; i++) h += `<div class="${classe}"></div>`; box.innerHTML = h; } }
-
         function liberarInputOp(col) { let el = getElOp('res-' + col); el.disabled = false; if(window.innerWidth > 600) el.focus(); }
         function sucessoInputOp(el) { el.disabled = true; el.classList.remove('wrong'); el.classList.add('correct'); }
         function erroInputOp(el) { el.classList.add('wrong'); notificarAcaoOp('Ops! O valor está incorreto. Tente novamente!', '#e74c3c'); setTimeout(() => { el.classList.remove('wrong'); el.value = ''; }, 1200); }
         function mostrarBotaoFinalOp() { getElOp('btn-acao').classList.add('hidden'); getElOp('btn-final').classList.remove('hidden'); notificarAcaoOp('Tudo preenchido! Clique em "Verificar Resposta Final!"', '#2980b9'); }
 
         function verificarInput(coluna) {
-            let el = getElOp('res-' + coluna.toLowerCase());
-            let valDigitado = parseInt(el.value); el.classList.remove('wrong');
-            if(isNaN(valDigitado)) return;
+            let el = getElOp('res-' + coluna.toLowerCase()); let valDigitado = parseInt(el.value); el.classList.remove('wrong'); if(isNaN(valDigitado)) return;
             if (estadoOp.tipo === 'adicao') { validarAdicaoOp(coluna, valDigitado, el); } else { validarSubtracaoOp(coluna, valDigitado, el); }
         }
 
@@ -734,132 +610,71 @@
             if (coluna === 'U' && estadoOp.fase === 'U') {
                 let somaU = estadoOp.n1_u + estadoOp.n2_u;
                 if (valDigitado === somaU % 10) {
-                    sucessoInputOp(el); renderBlocosOp('m1-uni', 0, 'unidade'); renderBlocosOp('m2-uni', 0, 'unidade');
-                    estadoOp.vis_mr_u = somaU; getElOp('moldura-res').classList.remove('hidden'); renderBlocosOp('mr-uni', estadoOp.vis_mr_u, 'unidade');
-                    if (somaU >= 10) { mostrarBotaoAcaoOp('✨ Vai 1! (Trocar 10 Unidades por 1 Dezena) ✨', () => executarVai1Op('U', somaU)); notificarAcaoOp('Correto! Mas temos 10 ou mais unidades. Clique no botão para agrupar!', '#e67e22'); } 
-                    else { avancarFaseAdicaoOp('D'); }
+                    sucessoInputOp(el); renderBlocosOp('m1-uni', 0, 'unidade'); renderBlocosOp('m2-uni', 0, 'unidade'); estadoOp.vis_mr_u = somaU; getElOp('moldura-res').classList.remove('hidden'); renderBlocosOp('mr-uni', estadoOp.vis_mr_u, 'unidade');
+                    if (somaU >= 10) { mostrarBotaoAcaoOp('✨ Vai 1! (Trocar 10 Unidades por 1 Dezena) ✨', () => executarVai1Op('U', somaU)); notificarAcaoOp('Correto! Mas temos 10 ou mais unidades. Clique no botão para agrupar!', '#e67e22'); } else { avancarFaseAdicaoOp('D'); }
                 } else { erroInputOp(el); }
             } 
             else if (coluna === 'D' && estadoOp.fase === 'D') {
                 let somaD = estadoOp.n1_d + estadoOp.n2_d + estadoOp.carry_d;
                 if (valDigitado === somaD % 10) {
-                    sucessoInputOp(el); renderBlocosOp('m1-dez', 0, 'dezena'); renderBlocosOp('m2-dez', 0, 'dezena');
-                    estadoOp.vis_mr_d = somaD; renderBlocosOp('mr-dez', estadoOp.vis_mr_d, 'dezena');
-                    if (somaD >= 10) { mostrarBotaoAcaoOp('✨ Vai 1! (Trocar 10 Dezenas por 1 Centena) ✨', () => executarVai1Op('D', somaD)); notificarAcaoOp('Correto! Mas temos 10 ou mais dezenas. Clique no botão para agrupar!', '#e67e22'); } 
-                    else { avancarFaseAdicaoOp('C'); }
+                    sucessoInputOp(el); renderBlocosOp('m1-dez', 0, 'dezena'); renderBlocosOp('m2-dez', 0, 'dezena'); estadoOp.vis_mr_d = somaD; renderBlocosOp('mr-dez', estadoOp.vis_mr_d, 'dezena');
+                    if (somaD >= 10) { mostrarBotaoAcaoOp('✨ Vai 1! (Trocar 10 Dezenas por 1 Centena) ✨', () => executarVai1Op('D', somaD)); notificarAcaoOp('Correto! Mas temos 10 ou mais dezenas. Clique no botão para agrupar!', '#e67e22'); } else { avancarFaseAdicaoOp('C'); }
                 } else { erroInputOp(el); }
             }
             else if (coluna === 'C' && estadoOp.fase === 'C') {
                 let somaC = estadoOp.n1_c + estadoOp.n2_c + estadoOp.carry_c;
-                if (valDigitado === somaC) {
-                    sucessoInputOp(el); renderBlocosOp('m1-cen', 0, 'centena'); renderBlocosOp('m2-cen', 0, 'centena');
-                    estadoOp.vis_mr_c = somaC; renderBlocosOp('mr-cen', estadoOp.vis_mr_c, 'centena');
-                    mostrarBotaoFinalOp(); 
-                } else { erroInputOp(el); }
+                if (valDigitado === somaC) { sucessoInputOp(el); renderBlocosOp('m1-cen', 0, 'centena'); renderBlocosOp('m2-cen', 0, 'centena'); estadoOp.vis_mr_c = somaC; renderBlocosOp('mr-cen', estadoOp.vis_mr_c, 'centena'); mostrarBotaoFinalOp(); } else { erroInputOp(el); }
             }
         }
 
         function executarVai1Op(origem, somaGeral) {
             getElOp('btn-acao').classList.add('hidden');
-            if (origem === 'U') {
-                estadoOp.vis_mr_u -= 10; estadoOp.carry_d = 1;
-                renderBlocosOp('mr-uni', estadoOp.vis_mr_u, 'unidade'); getElOp('carry-d').innerText = '+1'; 
-                avancarFaseAdicaoOp('D');
-            } else if (origem === 'D') {
-                estadoOp.vis_mr_d -= 10; estadoOp.carry_c = 1;
-                renderBlocosOp('mr-dez', estadoOp.vis_mr_d, 'dezena');
-                getElOp('carry-c').innerText = '+1'; getElOp('carry-c').classList.remove('hidden');
-                avancarFaseAdicaoOp('C');
-            }
+            if (origem === 'U') { estadoOp.vis_mr_u -= 10; estadoOp.carry_d = 1; renderBlocosOp('mr-uni', estadoOp.vis_mr_u, 'unidade'); getElOp('carry-d').innerText = '+1'; avancarFaseAdicaoOp('D');
+            } else if (origem === 'D') { estadoOp.vis_mr_d -= 10; estadoOp.carry_c = 1; renderBlocosOp('mr-dez', estadoOp.vis_mr_d, 'dezena'); getElOp('carry-c').innerText = '+1'; getElOp('carry-c').classList.remove('hidden'); avancarFaseAdicaoOp('C'); }
         }
 
         function avancarFaseAdicaoOp(novaFase) {
             estadoOp.fase = novaFase;
-            if (novaFase === 'D') {
-                liberarInputOp('d'); notificarAcaoOp('Mágica feita! Agora some a coluna das DEZENAS.', '#2980b9');
+            if (novaFase === 'D') { liberarInputOp('d'); notificarAcaoOp('Mágica feita! Agora some a coluna das DEZENAS.', '#2980b9');
             } else if (novaFase === 'C') {
-                let temCentenaNoResultado = (estadoOp.n1_c + estadoOp.n2_c + estadoOp.carry_c) > 0;
-                if (estadoOp.temCentena || temCentenaNoResultado) {
-                    configurarVisibilidadeCentenasOp(true); liberarInputOp('c'); notificarAcaoOp('Mágica feita! Agora some a coluna das CENTENAS.', '#2980b9');
+                if (estadoOp.temCentena || (estadoOp.n1_c + estadoOp.n2_c + estadoOp.carry_c) > 0) { configurarVisibilidadeCentenasOp(true); liberarInputOp('c'); notificarAcaoOp('Mágica feita! Agora some a coluna das CENTENAS.', '#2980b9');
                 } else { mostrarBotaoFinalOp(); }
             }
         }
 
         function avaliarFaseSubtracaoOp() {
             if (estadoOp.fase === 'U') {
-                if (estadoOp.vis_m1_u < estadoOp.n2_u) {
-                    mostrarBotaoAcaoOp('🔨 Emprestar 1 Dezena para a Unidade 🔨', () => executarEmprestaOp('U'));
-                    notificarAcaoOp('Faltam unidades! Clique no botão para emprestar da dezena.', '#e74c3c');
+                if (estadoOp.vis_m1_u < estadoOp.n2_u) { mostrarBotaoAcaoOp('🔨 Emprestar 1 Dezena para a Unidade 🔨', () => executarEmprestaOp('U')); notificarAcaoOp('Faltam unidades! Clique no botão para emprestar da dezena.', '#e74c3c');
                 } else { liberarInputOp('u'); notificarAcaoOp('Resolva a coluna das UNIDADES e digite o valor.', '#333'); }
             } else if (estadoOp.fase === 'D') {
-                if (estadoOp.vis_m1_d < estadoOp.n2_d) {
-                    mostrarBotaoAcaoOp('🔨 Emprestar 1 Centena para a Dezena 🔨', () => executarEmprestaOp('D'));
-                    notificarAcaoOp('Faltam dezenas! Clique no botão para emprestar da centena.', '#e74c3c');
+                if (estadoOp.vis_m1_d < estadoOp.n2_d) { mostrarBotaoAcaoOp('🔨 Emprestar 1 Centena para a Dezena 🔨', () => executarEmprestaOp('D')); notificarAcaoOp('Faltam dezenas! Clique no botão para emprestar da centena.', '#e74c3c');
                 } else { liberarInputOp('d'); notificarAcaoOp('Resolva a coluna das DEZENAS e digite o valor.', '#333'); }
             } else if (estadoOp.fase === 'C') {
-                if(estadoOp.temCentena && (estadoOp.n1_c > 0 || estadoOp.vis_m1_c > 0)) {
-                    liberarInputOp('c'); notificarAcaoOp('Resolva a coluna das CENTENAS e digite o valor.', '#333');
+                if(estadoOp.temCentena && (estadoOp.n1_c > 0 || estadoOp.vis_m1_c > 0)) { liberarInputOp('c'); notificarAcaoOp('Resolva a coluna das CENTENAS e digite o valor.', '#333');
                 } else { mostrarBotaoFinalOp(); }
             }
         }
 
         function executarEmprestaOp(destino) {
             getElOp('btn-acao').classList.add('hidden');
-            if (destino === 'U') {
-                estadoOp.vis_m1_d -= 1; estadoOp.vis_m1_u += 10;
-                renderBlocosOp('m1-dez', estadoOp.vis_m1_d, 'dezena'); renderBlocosOp('m1-uni', estadoOp.vis_m1_u, 'unidade');
-                getElOp('num1-u').classList.add('riscado'); getElOp('carry-u').innerText = estadoOp.vis_m1_u;
-                getElOp('num1-d').classList.add('riscado'); getElOp('carry-d').innerText = estadoOp.vis_m1_d;
-                avaliarFaseSubtracaoOp(); 
-            } else if (destino === 'D') {
-                estadoOp.vis_m1_c -= 1; estadoOp.vis_m1_d += 10;
-                renderBlocosOp('m1-cen', estadoOp.vis_m1_c, 'centena'); renderBlocosOp('m1-dez', estadoOp.vis_m1_d, 'dezena');
-                getElOp('num1-c').classList.add('riscado'); getElOp('carry-c').innerText = estadoOp.vis_m1_c; getElOp('carry-c').classList.remove('hidden');
-                getElOp('carry-d').innerText = estadoOp.vis_m1_d; 
-                avaliarFaseSubtracaoOp(); 
-            }
+            if (destino === 'U') { estadoOp.vis_m1_d -= 1; estadoOp.vis_m1_u += 10; renderBlocosOp('m1-dez', estadoOp.vis_m1_d, 'dezena'); renderBlocosOp('m1-uni', estadoOp.vis_m1_u, 'unidade'); getElOp('num1-u').classList.add('riscado'); getElOp('carry-u').innerText = estadoOp.vis_m1_u; getElOp('num1-d').classList.add('riscado'); getElOp('carry-d').innerText = estadoOp.vis_m1_d; avaliarFaseSubtracaoOp(); 
+            } else if (destino === 'D') { estadoOp.vis_m1_c -= 1; estadoOp.vis_m1_d += 10; renderBlocosOp('m1-cen', estadoOp.vis_m1_c, 'centena'); renderBlocosOp('m1-dez', estadoOp.vis_m1_d, 'dezena'); getElOp('num1-c').classList.add('riscado'); getElOp('carry-c').innerText = estadoOp.vis_m1_c; getElOp('carry-c').classList.remove('hidden'); getElOp('carry-d').innerText = estadoOp.vis_m1_d; avaliarFaseSubtracaoOp(); }
         }
 
         function validarSubtracaoOp(coluna, valDigitado, el) {
-            if (coluna === 'U' && estadoOp.fase === 'U') {
-                if (valDigitado === (estadoOp.vis_m1_u - estadoOp.n2_u)) {
-                    sucessoInputOp(el); renderBlocosOp('m1-uni', valDigitado, 'unidade'); 
-                    estadoOp.fase = 'D'; avaliarFaseSubtracaoOp();
-                } else { erroInputOp(el); }
-            } 
-            else if (coluna === 'D' && estadoOp.fase === 'D') {
-                if (valDigitado === (estadoOp.vis_m1_d - estadoOp.n2_d)) {
-                    sucessoInputOp(el); renderBlocosOp('m1-dez', valDigitado, 'dezena');
-                    estadoOp.fase = 'C'; avaliarFaseSubtracaoOp();
-                } else { erroInputOp(el); }
-            }
-            else if (coluna === 'C' && estadoOp.fase === 'C') {
-                if (valDigitado === (estadoOp.vis_m1_c - estadoOp.n2_c)) {
-                    sucessoInputOp(el); renderBlocosOp('m1-cen', valDigitado, 'centena');
-                    mostrarBotaoFinalOp();
-                } else { erroInputOp(el); }
-            }
+            if (coluna === 'U' && estadoOp.fase === 'U') { if (valDigitado === (estadoOp.vis_m1_u - estadoOp.n2_u)) { sucessoInputOp(el); renderBlocosOp('m1-uni', valDigitado, 'unidade'); estadoOp.fase = 'D'; avaliarFaseSubtracaoOp(); } else { erroInputOp(el); } } 
+            else if (coluna === 'D' && estadoOp.fase === 'D') { if (valDigitado === (estadoOp.vis_m1_d - estadoOp.n2_d)) { sucessoInputOp(el); renderBlocosOp('m1-dez', valDigitado, 'dezena'); estadoOp.fase = 'C'; avaliarFaseSubtracaoOp(); } else { erroInputOp(el); } }
+            else if (coluna === 'C' && estadoOp.fase === 'C') { if (valDigitado === (estadoOp.vis_m1_c - estadoOp.n2_c)) { sucessoInputOp(el); renderBlocosOp('m1-cen', valDigitado, 'centena'); mostrarBotaoFinalOp(); } else { erroInputOp(el); } }
         }
 
         function mostrarBotaoAcaoOp(texto, acao) { let btn = getElOp('btn-acao'); btn.innerText = texto; btn.onclick = acao; btn.classList.remove('hidden'); }
 
         function finalizarConta() {
-            getElOp('moldura-1').classList.add('hidden'); getElOp('moldura-2').classList.add('hidden'); 
-            getElOp('sinal-meio').classList.add('hidden'); getElOp('btn-final').classList.add('hidden');
-
-            if (estadoOp.tipo === 'subtracao') {
-                let rC = parseInt(getElOp('res-c').value)||0, rD = parseInt(getElOp('res-d').value)||0, rU = parseInt(getElOp('res-u').value)||0;
-                getElOp('moldura-res').classList.remove('hidden');
-                renderBlocosOp('mr-cen', rC, 'centena'); renderBlocosOp('mr-dez', rD, 'dezena'); renderBlocosOp('mr-uni', rU, 'unidade');
-            }
-
+            getElOp('moldura-1').classList.add('hidden'); getElOp('moldura-2').classList.add('hidden'); getElOp('sinal-meio').classList.add('hidden'); getElOp('btn-final').classList.add('hidden');
+            if (estadoOp.tipo === 'subtracao') { let rC = parseInt(getElOp('res-c').value)||0, rD = parseInt(getElOp('res-d').value)||0, rU = parseInt(getElOp('res-u').value)||0; getElOp('moldura-res').classList.remove('hidden'); renderBlocosOp('mr-cen', rC, 'centena'); renderBlocosOp('mr-dez', rD, 'dezena'); renderBlocosOp('mr-uni', rU, 'unidade'); }
             notificarAcaoOp('🌟 PERFEITO! A conta foi resolvida com sucesso! 🌟', '#27ae60');
-            
-            let num1Total = (estadoOp.n1_c * 100) + (estadoOp.n1_d * 10) + estadoOp.n1_u;
-            let num2Total = (estadoOp.n2_c * 100) + (estadoOp.n2_d * 10) + estadoOp.n2_u;
-            let resF = estadoOp.tipo === 'adicao' ? num1Total + num2Total : num1Total - num2Total;
-
-            let sinalStr = estadoOp.tipo === 'adicao' ? '+' : '-';
+            let num1Total = (estadoOp.n1_c * 100) + (estadoOp.n1_d * 10) + estadoOp.n1_u, num2Total = (estadoOp.n2_c * 100) + (estadoOp.n2_d * 10) + estadoOp.n2_u;
+            let resF = estadoOp.tipo === 'adicao' ? num1Total + num2Total : num1Total - num2Total; let sinalStr = estadoOp.tipo === 'adicao' ? '+' : '-';
             registrarConquistaGlobal(`${num1Total} ${sinalStr} ${num2Total} = ${resF}`);
         }
     </script>
