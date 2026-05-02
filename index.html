@@ -82,7 +82,9 @@
         .controls button:active { box-shadow: 0 0 #2980b9; transform: translateY(4px); }
         .btn-action { background-color: #e67e22; box-shadow: 0 4px #d35400; width: 100%; margin: 15px 0 10px 0; font-size: 16px; padding: 12px; animation: pulse 1.5s infinite; border-radius: 8px; color: white; font-weight: bold; border: none; cursor: pointer;}
         .btn-success { background-color: #2ecc71; box-shadow: 0 4px #27ae60; width: 100%; margin-top: 10px; padding: 15px; font-size: 18px; color: white; font-weight: bold; border: none; border-radius: 8px; cursor: pointer;}
-        .board { background: white; border: 4px solid #34495e; border-radius: 12px; padding: 20px; width: 100%; max-width: 340px; box-shadow: 0 8px 15px rgba(0,0,0,0.1); margin: 0 auto;}
+        
+        .game-container { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 30px; width: 100%; max-width: 900px; margin: 0 auto; }
+        .board { background: white; border: 4px solid #34495e; border-radius: 12px; padding: 20px; width: 100%; max-width: 340px; box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
         .row { display: flex; justify-content: space-between; font-size: 40px; margin: 5px 0; padding: 0 10px; }
         .row-numeros { display: flex; gap: 15px; justify-content: flex-end; width: 100%; padding-right: 10px;}
         .row-numeros span { width: 50px; text-align: center; display: inline-block; }
@@ -95,10 +97,10 @@
         .carry-borrow-indicator { font-size: 20px; color: #e74c3c; height: 25px; font-weight: bold;}
         .riscado { text-decoration: line-through; color: #95a5a6; }
         
-        .visualizer { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 10px; margin: 0 auto;}
+        .visualizer { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 10px; }
         .moldura { background: #ffffff; border: 3px solid #7f8c8d; border-radius: 10px; padding: 20px 10px 10px 10px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .moldura-titulo { position: absolute; top: -12px; left: 10px; background: white; padding: 0 8px; font-size: 14px; font-weight: bold; color: #7f8c8d; }
-        .sinal-operacao { font-size: 30px; font-weight: bold; color: #7f8c8d; margin: -5px 0; }
+        .sinal-operacao { font-size: 30px; font-weight: bold; color: #7f8c8d; margin: -5px 0; text-align: center; }
         .columns { display: flex; justify-content: space-around; padding-top: 5px; gap: 5px; }
         .col-centena, .col-dezena, .col-unidade { min-height: 80px; background: #f9f9f9; border-radius: 6px; display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: center; padding: 5px; gap: 4px;}
         .centena { width: 100px; height: 100px; background-color: #f1c40f; border: 1px solid #d35400; border-radius: 2px; margin-bottom: 5px; background-image: repeating-linear-gradient(to right, transparent, transparent 9px, #d35400 9px, #d35400 10px), repeating-linear-gradient(to bottom, transparent, transparent 9px, #d35400 9px, #d35400 10px); }
@@ -335,6 +337,9 @@
     <div id="tela-menu-ingles" class="screen">
         <h2 style="color: #3f51b5; font-size: 24px;">Welcome to the English Portal!</h2>
         <div class="menu-container">
+            <div class="card-jogo" style="border-color: #3f51b5;" onclick="abrirTela('tela-ingles-matching', 'tela-menu-ingles', 'Animals Match', '#3f51b5'); iniciarAnimalsMatch();">
+                <h2 style="color: #3f51b5;">Animals Match</h2><div class="card-icon">🦁🦅</div><p>Relacione o nome do animal com a figura correspondente!</p><button class="card-btn" style="background: #3f51b5; box-shadow: 0 4px #303f9f;">Play</button>
+            </div>
             <div class="card-jogo" style="border-color: #3f51b5;" onclick="abrirTela('tela-ingles-memory', 'tela-menu-ingles', 'Memory Game', '#3f51b5'); iniciarMemoryIngles();">
                 <h2 style="color: #3f51b5;">Animals Memory</h2><div class="card-icon">🐶🐮</div><p>Encontre os pares dos animais em inglês!</p><button class="card-btn" style="background: #3f51b5; box-shadow: 0 4px #303f9f;">Play</button>
             </div>
@@ -436,6 +441,19 @@
     <div id="tela-ingles-oddeven" class="screen"><div class="game-area-drag radar-area" style="max-width: 600px;"><h2 style="margin-top: 0; font-size: 32px; color: #00e676;">📡 Odd & Even Radar</h2><p class="instrucao" style="color: #c5cae9;">Analise o número no radar. Ele é <b>Even</b> (Par) ou <b>Odd</b> (Ímpar)?</p><div class="radar-progress" id="radar-progress">Alvos analisados: 0 / 5</div><div class="radar-display" id="radar-number">000</div><div class="radar-btn-group"><button class="radar-btn btn-even" onclick="verificarOddEven('even')">EVEN (Par)</button><button class="radar-btn btn-odd" onclick="verificarOddEven('odd')">ODD (Ímpar)</button></div><div class="feedback-drag" id="feedback-oddeven" style="text-align: center;"></div></div></div>
     
     <div id="tela-ingles-days" class="screen"><div class="game-area-drag english-area" style="background: #e3f2fd; border-color: #3f51b5; color: #1a237e; max-width: 800px;"><h2 style="margin-top: 0; font-size: 32px; color: #3f51b5;">🚂 Time Train</h2><p class="instrucao" style="color: #3949ab;">Preencha os vagões com o dia de ontem (YESTERDAY) e amanhã (TOMORROW)!</p><div class="train-container" id="train-container"><div class="train-locomotive">🚂</div><div class="train-wagon" id="wagon-yesterday" data-expected=""><div class="wagon-title">YESTERDAY</div><div class="wagon-content empty">?</div></div><div class="train-wagon filled" id="wagon-today"><div class="wagon-title">TODAY IS</div><div class="wagon-content" id="today-text" style="font-size: 14px;">MONDAY</div></div><div class="train-wagon" id="wagon-tomorrow" data-expected=""><div class="wagon-title">TOMORROW</div><div class="wagon-content empty">?</div></div></div><div class="days-station" id="days-station"></div><div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;"><button class="btn-verificar" style="background: #e74c3c; box-shadow: 0 6px 0px #c0392b; width: 140px; margin-top:0;" onclick="apagarTimeTrain()">Clear ❌</button><button class="btn-verificar" style="background: #3f51b5; box-shadow: 0 6px 0px #303f9f; width: 140px; margin-top:0;" onclick="verificarTimeTrain()">Go! 🛤️</button></div><div class="feedback-drag" id="feedback-train" style="text-align: center;"></div></div></div>
+
+    
+    <div id="tela-ingles-matching" class="screen">
+        <div class="game-area-drag english-area" style="background: #e8eaf6; border-color: #3f51b5; color: #1a237e; max-width: 900px;">
+            <h2 style="margin-top: 0; font-size: 32px; color: #3f51b5;">🦒 Animals Match</h2>
+            <p class="instrucao" style="color: #3949ab;">Arraste (ou clique) o nome em inglês para a caixa embaixo do animal correto!</p>
+            <div class="planets-grid" id="animals-match-dropzones"></div>
+            <p style="color: #3f51b5; font-weight: bold; margin-bottom: 10px;">English Names (Toque e Encaixe):</p>
+            <div class="options-container" id="animals-match-options" style="background: white; border-color: #3f51b5;"></div>
+            <button class="btn-verificar" style="background: #3f51b5; color: white; box-shadow: 0 6px 0px #303f9f;" onclick="verificarAnimalsMatch()">Check Animals! 🦁</button>
+            <div class="feedback-drag" id="feedback-animals-match"></div>
+        </div>
+    </div>
 
     <!-- PORTUGUÊS -->
     <div id="tela-fabrica-silabas" class="screen"><div class="game-area-drag portuguese-area"><h2 style="margin-top: 0; font-size: 32px;">🏭 Fábrica de Sílabas</h2><p class="instrucao">Toque na palavra da esteira e coloque-a na caixa correspondente!</p><div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-bottom: 30px;"><div style="text-align: center;"><div style="font-weight: bold; color: #c0392b; margin-bottom: 5px;">1 Sílaba</div><div class="dropzone drop-silaba" data-certo="Monossílaba" data-label="Monossílaba" onclick="soltarPeca(this)">Monossílaba</div></div><div style="text-align: center;"><div style="font-weight: bold; color: #c0392b; margin-bottom: 5px;">2 Sílabas</div><div class="dropzone drop-silaba" data-certo="Dissílaba" data-label="Dissílaba" onclick="soltarPeca(this)">Dissílaba</div></div><div style="text-align: center;"><div style="font-weight: bold; color: #c0392b; margin-bottom: 5px;">3 Sílabas</div><div class="dropzone drop-silaba" data-certo="Trissílaba" data-label="Trissílaba" onclick="soltarPeca(this)">Trissílaba</div></div><div style="text-align: center;"><div style="font-weight: bold; color: #c0392b; margin-bottom: 5px;">4 ou + Sílabas</div><div class="dropzone drop-silaba" data-certo="Polissílaba" data-label="Polissílaba" onclick="soltarPeca(this)">Polissílaba</div></div></div><p style="color: #7f8c8d; font-weight: bold;">Esteira de Palavras (Toque e Encaixe):</p><div class="options-container" id="silabas-options" style="background: #fdedec; border-color: #e74c3c;"></div><button class="btn-verificar" style="background: #c0392b; box-shadow: 0 6px 0px #922b21;" onclick="verificarFabricaSilabas()">Analisar Caixas! 📦</button><div class="feedback-drag" id="feedback-silabas"></div></div></div>
@@ -1010,6 +1028,76 @@
         function validarSubtracaoOp(coluna, valDigitado, el) { if (coluna === 'U' && estadoOp.fase === 'U') { if (valDigitado === (estadoOp.vis_m1_u - estadoOp.n2_u)) { sucessoInputOp(el); renderBlocosOp('m1-uni', valDigitado, 'unidade'); estadoOp.fase = 'D'; avaliarFaseSubtracaoOp(); } else { erroInputOp(el); } } else if (coluna === 'D' && estadoOp.fase === 'D') { if (valDigitado === (estadoOp.vis_m1_d - estadoOp.n2_d)) { sucessoInputOp(el); renderBlocosOp('m1-dez', valDigitado, 'dezena'); estadoOp.fase = 'C'; avaliarFaseSubtracaoOp(); } else { erroInputOp(el); } } else if (coluna === 'C' && estadoOp.fase === 'C') { if (valDigitado === (estadoOp.vis_m1_c - estadoOp.n2_c)) { sucessoInputOp(el); renderBlocosOp('m1-cen', valDigitado, 'centena'); mostrarBotaoFinalOp(); } else { erroInputOp(el); } } }
         function mostrarBotaoAcaoOp(texto, acao) { let btn = getElOp('btn-acao'); btn.innerText = texto; btn.onclick = acao; btn.classList.remove('hidden'); }
         function finalizarConta() { getElOp('moldura-1').classList.add('hidden'); getElOp('moldura-2').classList.add('hidden'); getElOp('sinal-meio').classList.add('hidden'); getElOp('btn-final').classList.add('hidden'); if (estadoOp.tipo === 'subtracao') { let rC = parseInt(getElOp('res-c').value)||0, rD = parseInt(getElOp('res-d').value)||0, rU = parseInt(getElOp('res-u').value)||0; getElOp('moldura-res').classList.remove('hidden'); renderBlocosOp('mr-cen', rC, 'centena'); renderBlocosOp('mr-dez', rD, 'dezena'); renderBlocosOp('mr-uni', rU, 'unidade'); } notificarAcaoOp('🌟 PERFEITO! 🌟', '#27ae60'); let num1Total = (estadoOp.n1_c * 100) + (estadoOp.n1_d * 10) + estadoOp.n1_u, num2Total = (estadoOp.n2_c * 100) + (estadoOp.n2_d * 10) + estadoOp.n2_u; let resF = estadoOp.tipo === 'adicao' ? num1Total + num2Total : num1Total - num2Total; let sinalStr = estadoOp.tipo === 'adicao' ? '+' : '-'; registrarConquistaGlobal(`${num1Total} ${sinalStr} ${num2Total} = ${resF}`); ganharFigurinha(2); }
+    
+        // ==========================================
+        // 🇬🇧 INGLÊS: ANIMALS MATCH
+        // ==========================================
+        const allAnimals = [
+            { en: 'SHEEP', emoji: '🐑' }, { en: 'DUCK', emoji: '🦆' }, { en: 'PIG', emoji: '🐷' }, { en: 'TURKEY', emoji: '🦃' }, 
+            { en: 'QUAIL', emoji: '🐦' }, { en: 'HORSE', emoji: '🐴' }, { en: 'COW', emoji: '🐮' }, { en: 'CHICKEN', emoji: '🐔' }, 
+            { en: 'CHICK', emoji: '🐤' }, { en: 'ROOSTER', emoji: '🐓' }, { en: 'GOAT', emoji: '🐐' }, { en: 'DOG', emoji: '🐶' }, 
+            { en: 'RABBIT', emoji: '🐰' }, { en: 'CAT', emoji: '🐱' }, { en: 'PARAKEET', emoji: '🦜' }, { en: 'TURTLE', emoji: '🐢' }, 
+            { en: 'IGUANA', emoji: '🦎' }, { en: 'FISH', emoji: '🐟' }, { en: 'FERRET', emoji: '🦦' }, { en: 'MOUSE', emoji: '🐭' }, 
+            { en: 'SNAKE', emoji: '🐍' }, { en: 'HAMSTER', emoji: '🐹' }, { en: 'HEDGEHOG', emoji: '🦔' }
+        ];
+
+        function iniciarAnimalsMatch() {
+            document.getElementById('feedback-animals-match').innerText = ''; pecaSelecionada = null;
+            let dzContainer = document.getElementById('animals-match-dropzones'); dzContainer.innerHTML = '';
+            // Pick 8 random animals from the total list to make the round balanced
+            let roundAnimals = [...allAnimals].sort(() => Math.random() - 0.5).slice(0, 8);
+            
+            roundAnimals.forEach(a => {
+                let box = document.createElement('div');
+                box.className = 'planet-box';
+                box.style.width = '160px'; // Slightly wider for animal names
+                box.innerHTML = `<div class="planet-emoji" style="font-size: 50px;">${a.emoji}</div>`;
+                let dz = document.createElement('div');
+                dz.className = 'dropzone drop-planet';
+                dz.style.width = '140px';
+                dz.dataset.certo = a.en;
+                dz.onclick = () => soltarPeca(dz);
+                box.appendChild(dz);
+                dzContainer.appendChild(box);
+            });
+
+            let optContainer = document.getElementById('animals-match-options'); optContainer.innerHTML = '';
+            let shuffledNames = [...roundAnimals].sort(() => Math.random() - 0.5);
+            shuffledNames.forEach(a => {
+                let div = document.createElement('div');
+                div.className = 'tile tile-planet';
+                div.style.width = '120px';
+                div.innerText = a.en;
+                div.dataset.val = a.en;
+                div.onclick = () => {
+                    div.style.width = '120px'; div.style.height = '40px'; div.style.fontSize = '14px';
+                    div.style.boxShadow = `0 4px 0px #303f9f`; div.style.borderRadius = '8px';
+                    selecionarPeca(div);
+                };
+                optContainer.appendChild(div);
+            });
+        }
+
+        function verificarAnimalsMatch() {
+            let dzs = document.querySelectorAll('#animals-match-dropzones .drop-planet'), fb = document.getElementById('feedback-animals-match');
+            if(!Array.from(dzs).every(dz => dz.querySelector('.tile') !== null)) { fb.innerText = 'Coloque todos os nomes antes de checar!'; fb.style.color = '#e74c3c'; return; }
+            let erros = 0;
+            dzs.forEach(dz => {
+                let peca = dz.querySelector('.tile'), respostaCerta = dz.dataset.certo, respostaDada = peca.dataset.val;
+                if(respostaCerta === respostaDada) {
+                    peca.classList.add('correct'); peca.style.backgroundColor = '#2ecc71'; peca.style.boxShadow = '0 6px 0px #27ae60';
+                } else {
+                    peca.classList.add('wrong'); setTimeout(() => peca.classList.remove('wrong'), 500); erros++;
+                }
+            });
+            if(erros === 0) {
+                fb.innerHTML = '🐾 Amazing! You know all the animals! 🌟'; fb.style.color = '#2ecc71';
+                registrarConquistaGlobal(`Inglês: Animals Match Hero!`); ganharFigurinha(3);
+                setTimeout(iniciarAnimalsMatch, 4000);
+            } else {
+                fb.innerText = 'Ops! Alguns animais estão com o nome errado. Toque no vermelho para tentar de novo.'; fb.style.color = '#e74c3c';
+            }
+        }
     </script>
 </body>
 </html>
